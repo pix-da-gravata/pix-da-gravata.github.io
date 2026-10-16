@@ -6,7 +6,14 @@
 <meta name="robots" content="noindex">
 <meta name="description" content="Pix da Gravata de Lucas & Livia">
 <title>Pix da Gravata · Lucas & Livia</title>
-<style>body{margin:0}</style>
+<style>body{margin:0}.valores-pix{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.vp{background:var(--surface);color:var(--ink);border:1.5px solid var(--line);font-family:var(--display);font-weight:700;font-size:20px;padding:12px 6px;font-variant-numeric:tabular-nums}
+.vp[data-v="outro"],.vp[data-v=""]{font-family:var(--body);font-size:15px;font-weight:600}
+.vp[aria-checked="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.outro{display:flex;flex-direction:column;gap:5px;font-size:14px;font-weight:600}
+.outro input{font:inherit;font-weight:600;font-size:20px;padding:11px 12px;border:1.5px solid var(--accent);border-radius:10px;background:var(--bg);color:var(--ink);width:100%}
+.vp:focus-visible,.outro input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+</style>
 </head>
 <body>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap">
@@ -80,6 +87,13 @@ footer{font-size:13px;color:var(--muted);text-align:center}
 .obrigado-msg{margin:0;font-size:15px;line-height:1.55;color:var(--ink);text-wrap:balance}
 .obrigado-ass{margin:0;font-size:14px;color:var(--muted)}
 .obrigado-ass b{display:inline-block;margin-top:2px;font-family:var(--display);font-weight:800;font-size:22px;color:var(--accent)}
+.valores-pix{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.vp{background:var(--surface);color:var(--ink);border:1.5px solid var(--line);font-family:var(--display);font-weight:700;font-size:20px;padding:12px 6px;font-variant-numeric:tabular-nums}
+.vp[data-v="outro"],.vp[data-v=""]{font-family:var(--body);font-size:15px;font-weight:600}
+.vp[aria-checked="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.outro{display:flex;flex-direction:column;gap:5px;font-size:14px;font-weight:600}
+.outro input{font:inherit;font-weight:600;font-size:20px;padding:11px 12px;border:1.5px solid var(--accent);border-radius:10px;background:var(--bg);color:var(--ink);width:100%}
+.vp:focus-visible,.outro input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 </style>
 
 <main>
@@ -87,14 +101,23 @@ footer{font-size:13px;color:var(--muted);text-align:center}
     <svg class="tie" viewBox="0 0 24 70" aria-hidden="true"><path fill="currentColor" d="M6 0h12l-2 9H8zM7.6 10.4h8.8L23 56 12 70 1 56z"/></svg>
     <span class="eyebrow">Pix da Gravata</span>
     <h1>Lucas de Arruda dos Santos</h1>
-    <p class="para">Corte um pedaço da gravata do noivo e mande seu presente pelo Pix. O valor é você quem escolhe.</p>
+    <p class="para">Corte um pedaço da gravata do noivo e mande seu presente pelo Pix. Escolha o valor ou digite no app do banco.</p>
   </header>
 
   <section class="card" aria-label="Pagar com Pix">
     <div class="opt-head"><h2>Pix</h2><span class="chip">Sem taxa · você escolhe o valor</span></div>
+    <div class="valores-pix" role="radiogroup" aria-label="Valor do presente">
+      <button type="button" class="vp" role="radio" aria-checked="false" data-v="20">R$ 20</button>
+      <button type="button" class="vp" role="radio" aria-checked="false" data-v="50">R$ 50</button>
+      <button type="button" class="vp" role="radio" aria-checked="false" data-v="100">R$ 100</button>
+      <button type="button" class="vp" role="radio" aria-checked="false" data-v="200">R$ 200</button>
+      <button type="button" class="vp" role="radio" aria-checked="false" data-v="outro">Outro valor</button>
+      <button type="button" class="vp" role="radio" aria-checked="true" data-v="">Digitar no banco</button>
+    </div>
+    <label class="outro" id="outroBox" for="outro" hidden>Valor (R$)<input id="outro" type="text" inputmode="decimal" placeholder="Ex.: 150" autocomplete="off"></label>
     <button class="copy" id="copiar" type="button">Copiar código Pix</button>
     <p class="status" id="status" role="status"></p>
-    <p class="para" style="font-size:14px">Depois abra o app do banco, entre em <b>Pix → Pix Copia e Cola</b>, cole e digite o valor.</p>
+    <p class="para" style="font-size:14px" id="instrucao">Depois abra o app do banco, entre em <b>Pix → Pix Copia e Cola</b>, cole e digite o valor.</p>
     <textarea id="codigo" rows="3" readonly aria-label="Código Pix copia e cola">00020126360014br.gov.bcb.pix0114+55119445752625204000053039865802BR5924LUCAS DE ARRUDA D SANTOS6009SAO ROQUE62070503***63042E9C</textarea>
     <button class="sec" id="copiarChave" type="button">Copiar chave <span id="chave" style="white-space:nowrap">(11) 94457-5262</span></button>
   </section>
@@ -119,7 +142,39 @@ footer{font-size:13px;color:var(--muted);text-align:center}
     const falha = () => { selecionar(el); $("status").textContent = "Código selecionado. Toque e segure para copiar."; };
     try { navigator.clipboard.writeText(texto).then(ok, falha); } catch(e){ falha(); }
   }
-  $("copiar").addEventListener("click", () => copiar($("codigo").value, $("codigo"), $("copiar"), "Código copiado", "Copiar código Pix"));
+  // ---- Pix com valor: o próprio código leva o valor (campo 54 do BR Code) ----
+  const CHAVE = "+5511944575262", NOME = "LUCAS DE ARRUDA D SANTOS", CIDADE = "SAO ROQUE";
+  const campo = (id, v) => id + String(v.length).padStart(2, "0") + v;
+  function crc16(t){ let c = 0xffff; for (let i = 0; i < t.length; i++){ c ^= t.charCodeAt(i) << 8; for (let j = 0; j < 8; j++) c = (c & 0x8000 ? (c << 1) ^ 0x1021 : c << 1) & 0xffff; } return c.toString(16).toUpperCase().padStart(4, "0"); }
+  function pix(valor){
+    let p = campo("00", "01") + campo("26", campo("00", "br.gov.bcb.pix") + campo("01", CHAVE)) + campo("52", "0000") + campo("53", "986");
+    if (valor > 0) p += campo("54", valor.toFixed(2));
+    p += campo("58", "BR") + campo("59", NOME) + campo("60", CIDADE) + campo("62", campo("05", "***")) + "6304";
+    return p + crc16(p);
+  }
+  let valor = 0;
+  const brl = v => "R$ " + (v % 1 ? v.toFixed(2).replace(".", ",") : String(v));
+  function rotuloCopiar(){ return valor > 0 ? "Copiar Pix de " + brl(valor) : "Copiar código Pix"; }
+  function atualizar(){
+    $("codigo").value = pix(valor);
+    $("copiar").textContent = rotuloCopiar();
+    $("instrucao").innerHTML = valor > 0
+      ? "Depois abra o app do banco, entre em <b>Pix → Pix Copia e Cola</b> e cole. O valor de <b>" + brl(valor) + "</b> já vem preenchido."
+      : "Depois abra o app do banco, entre em <b>Pix → Pix Copia e Cola</b>, cole e digite o valor.";
+    $("status").textContent = "";
+  }
+  document.querySelectorAll(".vp").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".vp").forEach(x => x.setAttribute("aria-checked", String(x === b)));
+    const outro = b.dataset.v === "outro";
+    $("outroBox").hidden = !outro;
+    if (outro){ $("outro").focus(); valor = lerOutro(); }
+    else valor = b.dataset.v ? +b.dataset.v : 0;
+    atualizar();
+  }));
+  function lerOutro(){ const n = parseFloat(($("outro").value || "").replace(/[^\d,\.]/g, "").replace(/\.(?=\d{3}(\D|$))/g, "").replace(",", ".")); return n > 0 && n < 1e6 ? Math.round(n * 100) / 100 : 0; }
+  $("outro").addEventListener("input", () => { valor = lerOutro(); atualizar(); });
+  $("copiar").addEventListener("click", () => copiar($("codigo").value, $("codigo"), $("copiar"), "Código copiado", rotuloCopiar()));
+  atualizar();
   $("copiarChave").addEventListener("click", () => copiar("11944575262", $("chave"), $("copiarChave"), "Chave copiada", "Copiar chave (11) 94457-5262"));
   const PROV = {
     pagbank: {nome: "PagBank", sub: "crédito ou débito",
